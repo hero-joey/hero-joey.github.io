@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Hexo">
+  <link 
+    rel="icon" 
+    href="/">
+  <title>Cmake编译常用命令</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Cmake编译常用命令">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://hero-joey.github.io/2023/10/03/Cmake%E7%BC%96%E8%AF%91%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/hero-joey.jpg">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2023-10-03">
+      <meta 
+        property="og:article:modified_time" 
+        content="2023-10-07">
+      <meta 
+        property="og:article:author" 
+        content="hero-joey">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="CMAKE">
+        
+      
+    
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  <link rel="preload" href="/css/main.css" as="style" >
+  
+  <link rel="modulepreload" href="//instant.page/5.1.0">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+  
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <a class="navbar-logo-main" href="/">
+      
+      <span class="navbar-logo-dsc">Hero-joey</span>
+      </a>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          Home
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          Archive
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          Tags
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          Categories
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          About
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          Friends
+        
+      </a>
+    
+    <button 
+      class="navbar-menu-item darknavbar navbar-menu-btn" 
+      aria-label="Toggle dark mode"
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </button>
+    <button 
+      class="navbar-menu-item searchnavbar navbar-menu-btn" 
+      aria-label="Toggle search"
+      id="search">
+      <!-- <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i> -->
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+        class="iconify iconify--ion" width="28" height="28" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
+        <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="28"
+          d="M256 80a176 176 0 1 0 176 176A176 176 0 0 0 256 80Z"></path>
+        <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="28"
+          d="M232 160a72 72 0 1 0 72 72a72 72 0 0 0-72-72Z"></path>
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="28"
+          d="M283.64 283.64L336 336"></path>
+      </svg>
+    </button>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/hero-joey.jpg" 
+    class="author-img"
+    width="88"
+    height="88"
+    alt="author avatar">
+
+<p class="author-name">hero-joey</p>
+<p class="author-description">Stay Hungry. Stay Foolish.</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>5</span>
+    <span>Posts</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>3</span>
+    <span>Categories</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>3</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>TOC
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cmake%E7%BC%96%E8%AF%91%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">Cmake编译常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#set-unset"><span class="toc-text">set&#x2F;unset</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list"><span class="toc-text">list</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Option"><span class="toc-text">Option</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Loops-and-conditions"><span class="toc-text">Loops and conditions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#while"><span class="toc-text">while</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#foreach"><span class="toc-text">foreach</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function"><span class="toc-text">function</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>Categories
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/CMAKE%E4%BD%BF%E7%94%A8/">
+        <div class="categories-list-item">
+          CMAKE使用
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E8%AF%91%E5%89%8D%E7%AB%AF/">
+        <div class="categories-list-item">
+          编译前端
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/C-11%E6%96%B0%E7%89%B9%E6%80%A7/">
+        <div class="categories-list-item">
+          C-11新特性
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>hot tags
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/CMAKE/" 
+        title="CMAKE">
+        <div class="tags-list-item">CMAKE</div>
+      </a>
+    
+      <a 
+        href="/tags/C-%E8%AF%AD%E8%A8%80/" 
+        title="C++语言">
+        <div class="tags-list-item">C++语言</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" 
+        title="编译器">
+        <div class="tags-list-item">编译器</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <main class="main-column">
+              
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Cmake编译常用命令
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2023-10-03T04:17:23.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2023-10-03</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/CMAKE%E4%BD%BF%E7%94%A8/" 
+          class="post-meta-link">
+          CMAKE使用
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.1k words</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/CMAKE/" 
+            class="post-meta-link">
+            CMAKE
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h2 id="Cmake编译常用命令"><a href="#Cmake编译常用命令" class="headerlink" title="Cmake编译常用命令"></a>Cmake编译常用命令</h2><p>cmake命令参考官方文档(<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html">https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html</a>)</p>
+<h4 id="set-unset"><a href="#set-unset" class="headerlink" title="set&#x2F;unset"></a>set&#x2F;unset</h4><p>set(<variable> <value>… [PARENT_SCOPE])<br>unset(<variable> [CACHE | PARENT_SCOPE])</p>
+<p>example:</p>
+<pre class="highlight"><span class="line"><span class="keyword">set</span>(MYVAR <span class="number">0</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;Test var init value: $&#123;MYVAR&#125;&quot;</span>)</span><br></pre>
+
+
+
+<h4 id="list"><a href="#list" class="headerlink" title="list"></a>list</h4><pre class="highlight"><span class="line">Reading</span><br><span class="line">  <span class="keyword">list</span>(LENGTH &lt;<span class="keyword">list</span>&gt; &lt;out-var&gt;)</span><br><span class="line">  <span class="keyword">list</span>(GET &lt;<span class="keyword">list</span>&gt; &lt;element index&gt; [&lt;index&gt; ...] &lt;out-var&gt;)</span><br><span class="line">  <span class="keyword">list</span>(JOIN &lt;<span class="keyword">list</span>&gt; &lt;glue&gt; &lt;out-var&gt;)</span><br><span class="line">  <span class="keyword">list</span>(SUBLIST &lt;<span class="keyword">list</span>&gt; &lt;begin&gt; &lt;length&gt; &lt;out-var&gt;)</span><br><span class="line"></span><br><span class="line">Search</span><br><span class="line">  <span class="keyword">list</span>(FIND &lt;<span class="keyword">list</span>&gt; &lt;value&gt; &lt;out-var&gt;)</span><br><span class="line"></span><br><span class="line">Modification</span><br><span class="line">  <span class="keyword">list</span>(APPEND &lt;<span class="keyword">list</span>&gt; [&lt;element&gt;...])</span><br><span class="line">  <span class="keyword">list</span>(FILTER &lt;<span class="keyword">list</span>&gt; &#123;<span class="keyword">INCLUDE</span> | EXCLUDE&#125; REGEX &lt;regex&gt;)</span><br><span class="line">  <span class="keyword">list</span>(INSERT &lt;<span class="keyword">list</span>&gt; &lt;index&gt; [&lt;element&gt;...])</span><br><span class="line">  <span class="keyword">list</span>(POP_BACK &lt;<span class="keyword">list</span>&gt; [&lt;out-var&gt;...])</span><br><span class="line">  <span class="keyword">list</span>(POP_FRONT &lt;<span class="keyword">list</span>&gt; [&lt;out-var&gt;...])</span><br><span class="line">  <span class="keyword">list</span>(PREPEND &lt;<span class="keyword">list</span>&gt; [&lt;element&gt;...])</span><br><span class="line">  <span class="keyword">list</span>(REMOVE_ITEM &lt;<span class="keyword">list</span>&gt; &lt;value&gt;...)</span><br><span class="line">  <span class="keyword">list</span>(REMOVE_AT &lt;<span class="keyword">list</span>&gt; &lt;index&gt;...)</span><br><span class="line">  <span class="keyword">list</span>(REMOVE_DUPLICATES &lt;<span class="keyword">list</span>&gt;)</span><br><span class="line">  <span class="keyword">list</span>(TRANSFORM &lt;<span class="keyword">list</span>&gt; &lt;ACTION&gt; [...])</span><br><span class="line"></span><br><span class="line">Ordering</span><br><span class="line">  <span class="keyword">list</span>(REVERSE &lt;<span class="keyword">list</span>&gt;)</span><br><span class="line">  <span class="keyword">list</span>(SORT &lt;<span class="keyword">list</span>&gt; [...])</span><br></pre>
+
+<pre class="highlight"><span class="line">   <span class="comment">#examples for list operations</span></span><br><span class="line">   <span class="keyword">set</span>(MYLIST abc def ghi) </span><br><span class="line">   <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYLIST is: $&#123;MYLIST&#125;&quot;</span>)</span><br><span class="line">   <span class="keyword">set</span>(MYLIST <span class="string">&quot;abc;def;ghi&quot;</span>) </span><br><span class="line">   <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYLIST is: $&#123;MYLIST&#125;&quot;</span>)</span><br><span class="line">   <span class="keyword">list</span>(APPEND MYLIST <span class="string">&quot;xyz&quot;</span>) </span><br><span class="line">   <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYLIST is: $&#123;MYLIST&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">list</span>(LENGTH MYLIST MYLISTLEN)    <span class="comment">#求MYLIST长度, 设置到变量MYLISTLEN</span></span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYLIST LENGTH is: $&#123;MYLISTLEN&#125;&quot;</span>)</span><br><span class="line">  </span><br><span class="line"><span class="keyword">list</span>(FIND MYLIST jack JACK_INDEX)     <span class="comment">#查找MYLIST中jack的索引, 并将索引设置到变量JACK_INDEX, 查找不到索引为-1</span></span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: JACK index is: $&#123;JACK_INDEX&#125;&quot;</span>)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">list</span>(FIND MYLIST def ABC_INDEX)     <span class="comment">#查找MYLIST中def的索引, 并将索引设置到变量ABC_INDEX</span></span><br><span class="line">   <span class="keyword">list</span>(GET MYLIST <span class="variable">$&#123;ABC_INDEX&#125;</span> ABC)   <span class="comment">#查找MYLIST中ABC_INDEX数值对应的数据, 并设置到变量ABC</span></span><br><span class="line">   <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: Index of &#x27;def&#x27; in MYLIST is $&#123;ABC_INDEX&#125; the value at the index is &#x27;$&#123;ABC&#125;&#x27;&quot;</span>)</span><br></pre>
+
+
+
+<p>执行结果如下图所示:</p>
+<p><img src="https://raw.githubusercontent.com/hero-joey/doc-image/main/image-20231007205938371.png" alt="image-20231007205938371" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://raw.githubusercontent.com/hero-joey/doc-image/main/image-20231007205938371.png" class="lozad post-image"></p>
+<h4 id="Option"><a href="#Option" class="headerlink" title="Option"></a>Option</h4><pre class="highlight"><span class="line"><span class="keyword">option</span>(&lt;variable&gt; <span class="string">&quot;&lt;help_text&gt;&quot;</span> [value])</span><br><span class="line">cmake_dependent_option(&lt;<span class="keyword">option</span>&gt; <span class="string">&quot;&lt;help_text&gt;&quot;</span> &lt;value&gt; &lt;depends&gt; &lt;force&gt;)</span><br></pre>
+
+<p>option具有默认值OFF</p>
+<p>cmake_dependent_option设置的option依赖其他option，需引入CMakeDependentOption</p>
+<pre class="highlight"><span class="line"><span class="keyword">option</span>(CHAPTER1_PRINT_LANGUAGE_EXAMPLES <span class="string">&quot;Print examples for each language&quot;</span> <span class="keyword">OFF</span>)</span><br><span class="line"><span class="keyword">include</span>(CMakeDependentOption)</span><br><span class="line"><span class="comment"># create an option CHAPTER1_PRINT_HELLO_WORLD that is only visible of CHAPTER1_PRINT_LANGUAGE_EXAMPLES is set to ON</span></span><br><span class="line">cmake_dependent_option(CHAPTER1_PRINT_HELLO_WORLD <span class="string">&quot;Print a nice greeting from chapter1&quot;</span> <span class="keyword">ON</span> CHAPTER1_PRINT_LANGUAGE_EXAMPLES <span class="keyword">ON</span>)</span><br></pre>
+
+
+
+<h4 id="Loops-and-conditions"><a href="#Loops-and-conditions" class="headerlink" title="Loops and conditions"></a>Loops and conditions</h4><pre class="highlight"><span class="line"><span class="keyword">if</span>(&lt;condition&gt;)</span><br><span class="line">  &lt;commands&gt;</span><br><span class="line"><span class="keyword">elseif</span>(&lt;condition&gt;) <span class="comment"># optional block, can be repeated</span></span><br><span class="line">  &lt;commands&gt;</span><br><span class="line"><span class="keyword">else</span>()              <span class="comment"># optional block</span></span><br><span class="line">  &lt;commands&gt;</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre>
+
+
+
+<p><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/command/if.html#comparisons">https://cmake.org/cmake/help/latest/command/if.html#comparisons</a></p>
+<ul>
+<li><p>Basic Expressions</p>
+</li>
+<li><p>Logic Operators</p>
+</li>
+<li><p>Existence Checks</p>
+</li>
+<li><p>Comparisons</p>
+</li>
+<li><p>Version Comparisons</p>
+</li>
+<li><p>File Operations</p>
+</li>
+</ul>
+<h4 id="while"><a href="#while" class="headerlink" title="while"></a>while</h4><pre class="highlight"><span class="line"><span class="keyword">while</span>(&lt;condition&gt;)</span><br><span class="line">  &lt;commands&gt;</span><br><span class="line"><span class="keyword">endwhile</span>()</span><br></pre>
+
+
+
+<pre class="highlight"><span class="line"><span class="keyword">while</span>(MYVAR <span class="keyword">LESS</span> <span class="string">&quot;5&quot;</span>) </span><br><span class="line">     <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYVAR is &#x27;$&#123;MYVAR&#125;&#x27;&quot;</span>)</span><br><span class="line">     <span class="keyword">math</span>(EXPR MYVAR <span class="string">&quot;$&#123;MYVAR&#125;+1&quot;</span>) </span><br><span class="line"> <span class="keyword">endwhile</span>() </span><br></pre>
+
+
+
+<h4 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h4><pre class="highlight"><span class="line"><span class="keyword">foreach</span>(&lt;loop_var&gt; &lt;items&gt;)</span><br><span class="line">  &lt;commands&gt;</span><br><span class="line"><span class="keyword">endforeach</span>()</span><br></pre>
+
+
+
+<pre class="highlight"><span class="line"><span class="keyword">foreach</span>(ITEM IN LISTS MYLIST) </span><br><span class="line">    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: ITEM from MYLIST is &#x27;$&#123;ITEM&#125;&#x27;&quot;</span>)</span><br><span class="line"><span class="keyword">endforeach</span>() </span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span>(ITEM RANGE <span class="number">0</span> <span class="number">5</span>) </span><br><span class="line">    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: ITEM from RANGE is &#x27;$&#123;ITEM&#125;&#x27;&quot;</span>)</span><br><span class="line"><span class="keyword">endforeach</span>() </span><br></pre>
+
+
+
+<h4 id="function"><a href="#function" class="headerlink" title="function"></a>function</h4><pre class="highlight"><span class="line"><span class="keyword">function</span>(&lt;name&gt; [&lt;arg1&gt; ...])</span><br><span class="line">  &lt;commands&gt;</span><br><span class="line"><span class="keyword">endfunction</span>()</span><br></pre>
+
+<pre class="highlight"><span class="line"><span class="comment"># function example</span></span><br><span class="line"><span class="keyword">function</span>(foo ARG1) </span><br><span class="line">    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: foo called with &#x27;$&#123;ARG1&#125;&#x27;&quot;</span>)</span><br><span class="line"><span class="keyword">endfunction</span>() </span><br><span class="line"></span><br><span class="line"><span class="comment"># invoke foo with parameter bar </span></span><br><span class="line">foo(“bar”) </span><br></pre>
+
+
+
+<p>example:</p>
+<pre class="highlight"><span class="line"><span class="comment"># Top-level CMakeLists file for the Chapter 1 example content.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SPDX-License-Identifier: MIT</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.21</span>)</span><br><span class="line"><span class="keyword">project</span>(</span><br><span class="line">    chapter_1</span><br><span class="line">    VERSION <span class="number">1.0</span></span><br><span class="line">    DESCRIPTION</span><br><span class="line">        <span class="string">&quot;Examples for chapter 1 of the CMake Best Practices book&quot;</span></span><br><span class="line">    LANGUAGES CXX</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add subdirectories with a simple executable</span></span><br><span class="line"><span class="keyword">add_subdirectory</span>(simple_executable)</span><br><span class="line"><span class="keyword">add_subdirectory</span>(policy_example)</span><br><span class="line"></span><br><span class="line"><span class="keyword">option</span>(CHAPTER1_PRINT_LANGUAGE_EXAMPLES <span class="string">&quot;Print examples for each language&quot;</span> <span class="keyword">OFF</span>)</span><br><span class="line"><span class="keyword">include</span>(CMakeDependentOption)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create an option CHAPTER1_PRINT_HELLO_WORLD that is only visible of CHAPTER1_PRINT_LANGUAGE_EXAMPLES is set to ON</span></span><br><span class="line">cmake_dependent_option(CHAPTER1_PRINT_HELLO_WORLD <span class="string">&quot;Print a nice greeting from chapter1&quot;</span> <span class="keyword">ON</span> CHAPTER1_PRINT_LANGUAGE_EXAMPLES <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">mark_as_advanced</span>(CHAPTER1_PRINT_LANGUAGE_EXAMPLES)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(CHAPTER1_PRINT_LANGUAGE_EXAMPLES)</span><br><span class="line">    <span class="keyword">if</span>(CHAPTER1_PRINT_HELLO_WORLD)</span><br><span class="line">        <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: welcome to chapter 1!&quot;</span>)</span><br><span class="line">    <span class="keyword">endif</span>()</span><br><span class="line">    <span class="comment">#examples for list operations</span></span><br><span class="line">    <span class="keyword">set</span>(MYLIST abc def ghi) </span><br><span class="line">    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYLIST is: $&#123;MYLIST&#125;&quot;</span>)</span><br><span class="line">    <span class="keyword">set</span>(MYLIST <span class="string">&quot;abc;def;ghi&quot;</span>) </span><br><span class="line">    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYLIST is: $&#123;MYLIST&#125;&quot;</span>)</span><br><span class="line">    <span class="keyword">list</span>(APPEND MYLIST <span class="string">&quot;xyz&quot;</span>) </span><br><span class="line">    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYLIST is: $&#123;MYLIST&#125;&quot;</span>)</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	<span class="keyword">list</span>(LENGTH MYLIST MYLISTLEN)    <span class="comment">#求MYLIST长度, 设置到变量MYLISTLEN</span></span><br><span class="line">	<span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYLIST LENGTH is: $&#123;MYLISTLEN&#125;&quot;</span>)</span><br><span class="line">	  </span><br><span class="line">	<span class="keyword">list</span>(FIND MYLIST jack JACK_INDEX)     <span class="comment">#查找MYLIST中jack的索引, 并将索引设置到变量JACK_INDEX, 查找不到索引为-1</span></span><br><span class="line">	<span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: JACK index is: $&#123;JACK_INDEX&#125;&quot;</span>)</span><br><span class="line">	 </span><br><span class="line">	<span class="keyword">list</span>(FIND MYLIST def ABC_INDEX)     <span class="comment">#查找MYLIST中def的索引, 并将索引设置到变量ABC_INDEX</span></span><br><span class="line">	<span class="keyword">list</span>(GET MYLIST <span class="variable">$&#123;ABC_INDEX&#125;</span> ABC)   <span class="comment">#查找MYLIST中ABC_INDEX数值对应的数据, 并设置到变量ABC</span></span><br><span class="line">	<span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: Index of &#x27;def&#x27; in MYLIST is $&#123;ABC_INDEX&#125; the value at the index is &#x27;$&#123;ABC&#125;&#x27;&quot;</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># add MYVAR as cache variable with the value foo</span></span><br><span class="line">	<span class="keyword">set</span>(ch1_MYVAR foo CACHE <span class="keyword">STRING</span> <span class="string">&quot;Variable foo that configures bar&quot;</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># set a property for this directory</span></span><br><span class="line">	<span class="keyword">set_property</span>(DIRECTORY PROPERTY CHAPTER1_PROPERTY <span class="string">&quot;Hello from chapter 1&quot;</span>)</span><br><span class="line">	<span class="keyword">get_property</span>(CH1_PROPERTY_VARIABLE DIRECTORY PROPERTY CHAPTER1_PROPERTY)</span><br><span class="line">	<span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: Property value for CHAPTER1_PROPERTy is &#x27;$&#123;CH1_PROPERTY_VARIABLE&#125;&#x27;&quot;</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># loop examples</span></span><br><span class="line">	<span class="keyword">set</span>(MYVAR <span class="number">0</span>)</span><br><span class="line">	<span class="keyword">message</span>(STATUS <span class="string">&quot;Test var init value: $&#123;MYVAR&#125;&quot;</span>)</span><br><span class="line">	<span class="keyword">while</span>(MYVAR <span class="keyword">LESS</span> <span class="string">&quot;5&quot;</span>) </span><br><span class="line">	    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: MYVAR is &#x27;$&#123;MYVAR&#125;&#x27;&quot;</span>)</span><br><span class="line">	    <span class="keyword">math</span>(EXPR MYVAR <span class="string">&quot;$&#123;MYVAR&#125;+1&quot;</span>) </span><br><span class="line">	<span class="keyword">endwhile</span>() </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">foreach</span>(ITEM IN LISTS MYLIST) </span><br><span class="line">	    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: ITEM from MYLIST is &#x27;$&#123;ITEM&#125;&#x27;&quot;</span>)</span><br><span class="line">	<span class="keyword">endforeach</span>() </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">foreach</span>(ITEM RANGE <span class="number">0</span> <span class="number">5</span>) </span><br><span class="line">	    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: ITEM from RANGE is &#x27;$&#123;ITEM&#125;&#x27;&quot;</span>)</span><br><span class="line">	<span class="keyword">endforeach</span>() </span><br><span class="line">	</span><br><span class="line">	<span class="comment"># function example</span></span><br><span class="line">	<span class="keyword">function</span>(foo ARG1) </span><br><span class="line">	    <span class="keyword">message</span>(STATUS <span class="string">&quot;Chapter1: foo called with &#x27;$&#123;ARG1&#125;&#x27;&quot;</span>)</span><br><span class="line">	<span class="keyword">endfunction</span>() </span><br><span class="line">	</span><br><span class="line">	<span class="comment"># invoke foo with parameter bar </span></span><br><span class="line">	foo(“bar”) </span><br><span class="line"></span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre>
+
+<p><img src="https://raw.githubusercontent.com/hero-joey/doc-image/main/image-20231007215750541.png" alt="image-20231007215750541" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="https://raw.githubusercontent.com/hero-joey/doc-image/main/image-20231007215750541.png" class="lozad post-image"></p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            hero-joey
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://hero-joey.github.io/2023/10/03/Cmake%E7%BC%96%E8%AF%91%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+            https://hero-joey.github.io/2023/10/03/Cmake%E7%BC%96%E8%AF%91%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2023/10/03/C-11-%E6%96%B0%E7%89%B9%E6%80%A7/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">Prev</div>
+          
+            <div class="nav-title">C++11 新特性 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2023/10/03/hello-world/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">Next</div>
+          
+            <div class="nav-title">Hello World </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>TOC
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cmake%E7%BC%96%E8%AF%91%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">Cmake编译常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#set-unset"><span class="toc-text">set&#x2F;unset</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list"><span class="toc-text">list</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Option"><span class="toc-text">Option</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Loops-and-conditions"><span class="toc-text">Loops and conditions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#while"><span class="toc-text">while</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#foreach"><span class="toc-text">foreach</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function"><span class="toc-text">function</span></a></li></ol></li></ol></li></ol>
+</div>
+            </main>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>TOC
+</div>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cmake%E7%BC%96%E8%AF%91%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">Cmake编译常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#set-unset"><span class="toc-text">set&#x2F;unset</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#list"><span class="toc-text">list</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Option"><span class="toc-text">Option</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Loops-and-conditions"><span class="toc-text">Loops and conditions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#while"><span class="toc-text">while</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#foreach"><span class="toc-text">foreach</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function"><span class="toc-text">function</span></a></li></ol></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>Recent Posts
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-10-06</div>
+        <a href="/2023/10/06/ANTLR4%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><div class="recent-posts-item-content">ANTLR4编译环境搭建</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-10-03</div>
+        <a href="/2023/10/03/Cmake%E7%BC%96%E8%AF%91HelloWorld/"><div class="recent-posts-item-content">Cmake编译HelloWorld</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-10-03</div>
+        <a href="/2023/10/03/C-11-%E6%96%B0%E7%89%B9%E6%80%A7/"><div class="recent-posts-item-content">C++11 新特性</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2023-10-03</div>
+        <a href="/2023/10/03/Cmake%E7%BC%96%E8%AF%91%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><div class="recent-posts-item-content">Cmake编译常用命令</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020
+          
+          
+                - 
+                2023
+          
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Hero-joey
+        </a>
+      </div>
+    </div>
+
+    
+      <div class="footer-dsc">
+        
+          Powered by
+          <a 
+            href="https://hexo.io/" 
+            class="footer-link" 
+            target="_blank" 
+            rel="nofollow noopener noreferrer">
+            &nbsp;Hexo
+          </a>
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          Theme -
+          <a 
+            href="https://github.com/theme-kaze" 
+            class="footer-link" 
+            target="_blank"
+            rel="nofollow noopener noreferrer">
+            &nbsp;Kaze
+          </a>
+        
+      </div>
+    
+    
+    
+    
+</footer>
+ 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton"
+  aria-label="menu button"
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+    
+    <script src="//instant.page/5.1.0" type="module"
+      integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"></script>
+    
+    
+  </body>
+</html>
